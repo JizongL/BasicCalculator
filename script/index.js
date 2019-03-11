@@ -3,4 +3,5 @@
 
 $(document).ready(function(){
   calculator.calculatorListenerBinder();
-})
+  calculator.display();
+});

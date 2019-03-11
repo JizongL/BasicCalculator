@@ -44,14 +44,14 @@ main .row {
   border:0.1px solid lightgray;
 }
 
-#dot{
+#decimal{
   
   width:110px;
   height:110px;
   border:0.1px solid lightgray;
 }
 
-.zero-dot{
+.zero-decimal{
   display:flex;
   justify-content: space-between;
   align-self: auto;
@@ -61,7 +61,7 @@ main .row {
   width:226px;
 }
 
-#equal{
+#equals{
   
  height:220px;
   width:110px;
