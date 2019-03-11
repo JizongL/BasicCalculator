@@ -4,7 +4,8 @@ const databaseStore ={
   calculation:[],
   temp:[],
   tempDisplay:[],
-  opRecord:false
+  isSign:false,
+  isDecimal:false
   
 
 
