@@ -17,13 +17,18 @@ const calculator=(function(){
 
 
 
-
+  function validateBeforeNextCalculation(){
+    if(databaseStore.isEqual || databaseStore.isResult){
+      resetAll();
+    }
+  }
  
 
 
 
   function one(){
     $('#1').click(function(){
+      validateBeforeNextCalculation();
       validateTemp();
       databaseStore.isSign = false;
       let val = $(this).attr('id');
@@ -36,6 +41,7 @@ const calculator=(function(){
 
   function two(){
     $('#2').click(function(){
+      validateBeforeNextCalculation();
       validateTemp();
       databaseStore.isSign = false;
       let val = $(this).attr('id');
@@ -48,6 +54,7 @@ const calculator=(function(){
 
   function three(){
     $('#3').click(function(){
+      validateBeforeNextCalculation();
       validateTemp();
       databaseStore.isSign = false;
       let val = $(this).attr('id');
@@ -60,6 +67,7 @@ const calculator=(function(){
 
   function four(){
     $('#4').click(function(){
+      validateBeforeNextCalculation();
       validateTemp();
       databaseStore.isSign = false;
       let val = $(this).attr('id');
@@ -73,6 +81,7 @@ const calculator=(function(){
 
   function five(){
     $('#5').click(function(){
+      validateBeforeNextCalculation();
       validateTemp();
       databaseStore.isSign = false;
       let val = $(this).attr('id');
@@ -86,6 +95,7 @@ const calculator=(function(){
 
   function six(){
     $('#6').click(function(){
+      validateBeforeNextCalculation();
       validateTemp();
       databaseStore.isSign = false;
       let val = $(this).attr('id');
@@ -98,6 +108,7 @@ const calculator=(function(){
 
   function seven(){
     $('#7').click(function(){
+      validateBeforeNextCalculation();
       validateTemp();
       databaseStore.isSign = false;
       let val = $(this).attr('id');
@@ -110,6 +121,7 @@ const calculator=(function(){
 
   function eight(){
     $('#8').click(function(){
+      validateBeforeNextCalculation();
       validateTemp();
       databaseStore.isSign = false;
       let val = $(this).attr('id');
@@ -122,6 +134,7 @@ const calculator=(function(){
 
   function nine(){
     $('#9').click(function(){
+      validateBeforeNextCalculation();
       validateTemp();
       databaseStore.isSign = false;
       let val = $(this).attr('id');
@@ -134,6 +147,8 @@ const calculator=(function(){
 
   function decimal(){
     $('#decimal').click(function(){
+      validateBeforeNextCalculation();
+      validateTemp();
       databaseStore.isSign = false;
       if(!databaseStore.isDecimal)
       {console.log('.');
@@ -148,6 +163,8 @@ const calculator=(function(){
 
   function zero(){
     $('#zero').click(function(){
+      validateBeforeNextCalculation();
+      validateTemp();
       databaseStore.isSign = false;
       console.log(0);
       databaseStore.temp.push(0);
@@ -162,8 +179,11 @@ const calculator=(function(){
     databaseStore.temp[0]==='-'||
     databaseStore.temp[0]==='&times'||
     databaseStore.temp[0]==='/'||
-    databaseStore.temp[0]==='=')databaseStore.temp =[];
+    databaseStore.temp[0]==='=') {resetTempRecord();}
+
   }
+
+
 
   function signValidatorAndToDisplay(sign){
     if(databaseStore.tempDisplay[databaseStore.tempDisplay.length-1]==='+' ||
@@ -180,27 +200,52 @@ const calculator=(function(){
   }
 
  
-
-
-
-  function fixDecimal(arr){
-    arr
+  function times(a,b){
+    return a*b;
+  }
+  function add(a,b){
+    return a+b;
   }
 
-  function processCalArray(arr){
-    return arr.forEach(item => {
-      if(item!=='+'&&item!=='-'&&item!=='&times'&&item!=='/'&&item!=='=')
-        console.log('test item',item);
-      Number(item);
-    });
+  function sub(a,b){
+    return a-b;
+  }
+
+  function div(a,b){
+    return a/b;
   }
 
   function calculateResult(arr){
-    databaseStore.calculation = processCalArray(arr);
+    
+    while(arr.findIndex(item=>item==='&times')>0){
+      let indexForMultiply = arr.findIndex(item=>item==='&times');
+      let result = times(arr[indexForMultiply-1],arr[indexForMultiply+1]);
+      arr.splice(indexForMultiply-1,3,result);      
+    }
 
+    while(arr.findIndex(item=>item==='/')>0){
+      let indexForMultiply = arr.findIndex(item=>item==='/');
+      let result = div(arr[indexForMultiply-1],arr[indexForMultiply+1]);
+      arr.splice(indexForMultiply-1,3,result);      
+    }
+
+    while(arr.findIndex(item=>item==='+')>0){
+      let indexForMultiply = arr.findIndex(item=>item==='+');
+      let result = add(arr[indexForMultiply-1],arr[indexForMultiply+1]);
+      arr.splice(indexForMultiply-1,3,result);      
+    }
+
+    while(arr.findIndex(item=>item==='-')>0){
+      let indexForMultiply = arr.findIndex(item=>item==='-');
+      console.log('arr',arr);
+      console.log('index found last',indexForMultiply,arr[indexForMultiply-1],arr[indexForMultiply+1]);
+      let result = sub(arr[indexForMultiply-1],arr[indexForMultiply+1]);
+      arr.splice(indexForMultiply-1,3,result);      
+    }
+    console.log('final result',arr);
   }
 
-  function addition(){
+  function additionHandle(){
     console.log('`addition` ran');
     $('#add').click(function(){
       let val = Number(databaseStore.temp.join(''));
@@ -217,7 +262,7 @@ const calculator=(function(){
     });
   }
 
-  function subtraction(){
+  function subtractionHandle(){
     console.log('`subtraction` ran');
     $('#subtract').click(function(){
       let val = Number(databaseStore.temp.join(''));
@@ -233,7 +278,7 @@ const calculator=(function(){
     });
   }
 
-  function multiplication(){
+  function multiplicationHandle(){
     console.log('`multiplication` ran');
     $('#multiply').click(function(){
       let val = Number(databaseStore.temp.join(''));
@@ -258,7 +303,7 @@ const calculator=(function(){
     databaseStore.isSign = true;
   }
 
-  function division(){  
+  function divisionHandle(){  
     console.log('`division` ran');
     $('#divide').click(function(){
       let val = Number(databaseStore.temp.join(''));
@@ -277,21 +322,38 @@ const calculator=(function(){
 
   }
 
+  function resetCalculationRecord(){
+    databaseStore.calculation=[];
+  }
+  
   function equals(){
-    console.log('`render` ran');
+    console.log('`equal` ran');
     $('#equals').click(function(){
       let val = Number(databaseStore.temp.join(''));
       let sign = '=';
-      console.log(val);
-      console.log(databaseStore.temp.join(''));
+      //console.log(val);
+      //console.log(databaseStore.temp.join(''));
       databaseStore.calculation.push(val);
      
       signValidatorAndToDisplay(sign);
-      calculateResult(databaseStore.tempDisplay);
+      calculateResult(databaseStore.calculation);
+      let result = databaseStore.calculation[0];
+      console.log('test isresult',(!databaseStore.isResult));
+      console.log('result',result);
+      if(!databaseStore.isResult){
+        databaseStore.tempDisplay.push(result);
+        resetTempRecord();
+        databaseStore.temp.push(result);
+        databaseStore.isResult=true;
+      }
+      if(!databaseStore.isEqual){
+        display();
+        databaseStore.isEqual=true;
+      }
       
       resetTempRecord();
       
-      display();
+      
     });
   }
 
@@ -301,20 +363,29 @@ const calculator=(function(){
     console.log('reset temp',databaseStore.temp);
   }
 
+  function resetAll(){
+    databaseStore.calculation=[];
+    databaseStore.temp = [];
+    databaseStore.tempDisplay = [];    
+    databaseStore.isSign=false,
+    databaseStore.isDecimal=false,
+    databaseStore.isResult=false,
+    databaseStore.isEqual=false,
+    display();
+  }
+
+
   function resetCal(){
     $('#ac').click(function(){
-      databaseStore.calculation=[];
-      console.log('reset',databaseStore.calculation);
-      databaseStore.tempDisplay = [];
-      display();
+      resetAll();
     });
   }
 
   function calculatorListenerBinder(){
-    subtraction();
-    addition();
-    multiplication();
-    division();
+    subtractionHandle();
+    additionHandle();
+    multiplicationHandle();
+    divisionHandle();
     one();
     two();
     three();

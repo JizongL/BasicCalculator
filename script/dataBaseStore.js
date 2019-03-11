@@ -5,7 +5,8 @@ const databaseStore ={
   temp:[],
   tempDisplay:[],
   isSign:false,
-  isDecimal:false
+  isDecimal:false,
+  isResult:false
   
 
 
